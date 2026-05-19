@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Facture KARESS</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm;
+            @bottom-center {
+                content: element(footer);
+            }
+        }
+       body {
+    /* Times New Roman hiya l-font li bghiti */
+    font-family: "Times New Roman", Times, serif;
+    font-size: 11pt;
+    color: #000; /* Rejja3na l-loun k7al bach i-ji m3a Times New Roman */
+    line-height: 1.5;
+}
+
+        /* --- En-tête avec Logo --- */
+          .logo-section {
+            width: 100%;
+            margin-bottom: 10mm;
+        }
+        .logo-section img {
+            width: 300px; /* Logo kbir kima f s-soura */
+        }
+         /* --- Zone Facture (Gris à gauche) et Client (à droite) --- */
+        .main-info-section {
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 5mm;
+        }
+
+        .facture-box {
+            float: left;
+            width: 45%;
+            background-color: #D9EAF7;
+            padding: 15px;
+            min-height: 100px;
+            font-weight: bold;
+        }
+        .facture-box h2 {
+            text-align: center;
+            text-decoration: underline;
+            margin: 0 0 10px 0;
+            font-size: 16pt;
+        }
+        .facture-box p { margin: 8px 0; font-size: 12pt; }
+
+        .client-box {
+            float: right;
+            width: 50%;
+            text-align: center;
+            padding-top: 20px;
+            font-weight: bold;
+        }
+        .client-name {
+            font-weight: bold;
+            font-size: 16pt;
+            margin-bottom: 5px;
+        }
+
+        /* --- Objet f ster twil --- */
+        .objet-section {
+            clear: both;
+            width: 100%;
+            background-color: #D9EAF7;
+            padding: 8px 15px;
+            margin-bottom: 5mm;
+            font-size: 12pt;
+            font-weight: bold;
+        }
+
+        /* --- BC N° --- */
+        .bc-section {
+            width: 100%;
+            margin-bottom: 5mm;
+            font-size: 12pt;
+            border-bottom: none
+            padding-bottom: 5px;
+            text-decoration: underline;
+            font-weight: bold;
+            color:#000080;
+        }
+        /* --- LE TABLEAU --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15mm;
+            table-layout: fixed;
+        }
+
+        th {
+            background-color: #E8B15A;
+            color: black;
+            font-size: 12pt;
+            padding: 10px;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        th.col-desig { width: 50%; }
+        th.col-unite { width: 10%; }
+        th.col-qu { width: 10%; }
+        th.col-pu { width: 15%; }
+        th.col-montant { width: 30%; }
+
+        td {
+            border: 1px solid #000;
+            padding: 10px;
+            font-size: 11pt;
+            font-weight: bold;
+            vertical-align: top;
+            text-align: center;
+        }
+        .text-center { text-align: center;vertical-align: middle; }
+
+
+        /* --- Totaux --- */
+
+
+        .row-total-final {
+            background-color: #E8B15A;
+            font-weight: bold;
+            font-size: 13pt;
+            color: black;
+         vertical-align: middle;
+            text-align: center;
+        }
+        .row-total-final td {
+        text-align: center;
+            vertical-align: middle;
+         }
+        .row-total {
+            background-color: #E8B15A;
+            font-weight: bold;
+            font-size: 13pt;
+            color: black;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .row-total td {
+            text-align: center;
+            vertical-align: middle;
+         }
+        .phrase-fin {
+            clear: both;
+            width: 100%;
+            background-color: #D9EAF7;
+            padding: 4px 15px;
+            margin-bottom: 5mm;
+            font-size: 11pt;
+            font-weight: bold;
+
+        }
+        .phrase-fin strong {
+            font-size: 11pt;
+        }
+
+        #footer {
+            position: running(footer);
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 7pt;
+            color: #000;
+            border-top: none;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<div id="footer">
+    <p>
+        STE KARESS S.A.R.L au capital de 100 000.00 DH.— Siège social : 2ème étage, —N°95 BD BIR Anzarane Hay Nakhla, EL AIOUN<br />
+        Tél : 06 61 87 70 / Fax : 05 36 67 00 11 — E-mail : karess.sarl@hotmail.com<br />
+        RC N° 395 — Patente N° 11902240 — IF 15187659 — CNSS 4115772 — ICE 000517659000034<br />
+        RIB 007587000220500000013587 (ATTIJARIWAFA BANK)
+    </p>
+</div>
+
+
+
+
+
+<div class="logo-section">
+    <img src="images/logo.png" />
+</div>
+<div class="main-info-section">
+    <div class="facture-box">
+        <h2>Facture</h2>
+        <p><strong>Numéro :</strong> <span th:text="${facture.numeroFacture}"></span></p>
+        <p><strong>Date :</strong> <span th:text="${facture.dateFacture}"></span></p>
+    </div>
+    <div class="client-box">
+        <div class="client-name" th:text="${facture.clientNom}">LafargeHolcim Maroc</div>
+        <p th:text="${facture.clientAdresse}">6, route de Mekka, Casablanca</p>
+        <p>ICE : <span th:text="${facture.clientIce}"></span></p>
+    </div>
+</div>
+<br />
+<div class="objet-section">
+    <strong>Objet :</strong> <span th:text="${facture.objetFacture}"></span>
+</div>
+<div class="bc-section">
+    <strong><u>BC N° :</u></strong> <span th:text="${bcNumeroFormate}"></span>
+</div>
+
+<table class="table-facture">
+    <thead>
+    <tr>
+        <th class="col-desig">Désignation</th>
+        <th class="col-unite">Unité</th>
+        <th class="col-qu">Qu</th>
+        <th class="col-pu">P.U</th>
+        <th class="col-montant">Montant HTVA</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${facture.items}">
+        <td style="text-align: left; font-size: 10pt;" th:text="${item.designation}">Désignation</td>
+        <td class="text-center" th:text="${item.unite}">U</td>
+        <td class="text-center" th:text="${item.quantiteSaisie}">1 ou 20%</td>
+        <td class="text-center" th:text="${#numbers.formatDecimal(item.prixUnitaire, 1, 'POINT', 2, 'COMMA')}">0,00</td>
+        <td class="text-center" th:text="${#numbers.formatDecimal(item.montantHt, 1, 'POINT', 2, 'COMMA')}">0,00</td>
+    </tr>
+
+    <tr class="row-total">
+        <td colspan="4" class="text-right label-total">Total HTVA</td>
+        <td class="text-right value-total" th:text="${#numbers.formatDecimal(facture.totalHt, 1, 'POINT', 2, 'COMMA')}">0,00</td>
+    </tr>
+
+    <tr class="row-total">
+        <td colspan="4" class="text-right label-total">TVA <span th:text="${tvaRateLabel}">20</span>%</td>
+        <td class="text-right value-total" th:text="${#numbers.formatDecimal(facture.totalTva, 1, 'POINT', 2, 'COMMA')}">0,00</td>
+    </tr>
+
+    <tr class="row-total-final">
+        <td colspan="4" class="text-right label-total-final">Total TTC</td>
+        <td class="text-right value-total-final" th:text="${#numbers.formatDecimal(facture.totalTtc, 1, 'POINT', 2, 'COMMA')}">0,00</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="phrase-fin">
+    <p>Arrêter la présente facture à la somme de :
+        <strong><span th:text="${montantEnLettres}"></span></strong>
+    </p>
+</div>
+
+</body>
+</html>

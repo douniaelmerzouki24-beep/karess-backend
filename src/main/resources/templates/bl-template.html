@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        body { font-family: "Times New Roman", Times, serif; padding: 10px; color: #333; line-height: 1.4; }
+        .header-top { width: 100%; overflow: hidden; margin-bottom: 10px; }
+        .logo-container { float: left; width: 50%; }
+        .logo-container img { width: 250px; }
+        .date-box { float: right; background-color: #D9EAF7; padding: 8px 15px; font-weight: bold; border-radius: 4px; margin-top: 10px; }
+        .objet-container { clear: both; width: 100%; background-color: #D9EAF7; padding: 10px; margin: 15px 0; border-radius: 2px; font-size: 11pt; font-weight: bold; }
+        .title-box { text-align: center; margin: 20px auto 10px auto; font-weight: bold; font-size: 18pt; text-transform: uppercase; color: #000080}
+        .bl-number { font-size: 14pt; margin-top: 5px; }
+        .info-section { margin-top: 10px; font-size: 13pt; font-weight: bold; }
+        .info-section p { margin: 5px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; color: black; }
+        th, td { border: 1px solid black; padding: 8px; overflow: hidden; word-wrap: break-word; font-weight: bold;
+            vertical-align: top;
+            text-align: center; }
+        th { background-color: #E8B15A; color: black; font-size: 12pt; text-align: center; vertical-align: middle; }
+        .signature-section { width: 100%; margin-top: 40px; overflow: hidden; }
+        .sig-box { float: left; width: 49%; text-align: center; }
+        .sig-box.right { float: right; }
+        .sig-frame img { max-width: 100%; max-height: 100%; }
+        .sig-frame {
+    border: 1.5px solid black;
+    height: 180px;
+    margin-top: 10px;
+    position: relative;
+    background-color: #fff;
+
+    /* --- CONFIGURATION POUR LE CENTRAGE --- */
+    display: flex;           /* Active le mode Flexbox */
+    align-items: center;     /* Centre l'image verticalement */
+    justify-content: center; /* Centre l'image horizontalement */
+
+    /* --- SÉCURITÉ --- */
+    padding: 10px;           /* Empêche l'image de coller aux bords noirs */
+    box-sizing: border-box;  /* Inclut le padding dans les 180px de hauteur */
+    overflow: hidden;        /* Coupe tout ce qui dépasse si l'image est immense */
+}
+
+.cachet-image {
+    /* L'image s'adapte à la case sans jamais la déformer */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;     /* Garde les proportions du tampon */
+}
+        .phrase-fin { clear: both; width: 100%; background-color: #D9EAF7; padding: 4px 15px; margin-bottom: 5mm; font-size: 11pt; font-weight: bold; }
+        .phrase-fin strong { font-size: 11pt; }
+        .footer { position: fixed; bottom: 10px; font-size: 8pt; text-align: center; width: 100%; border-top: none; padding-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="header-top">
+    <div class="logo-container">
+        <img th:src="@{classpath:static/images/logo.png}" src="images/logo.png" />
+    </div>
+    <div class="date-box">
+        El Aïoun, Le <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}">13/05/2026</span>
+    </div>
+</div>
+
+<div class="title-box">
+    BON DE LIVRAISON
+    <div class="bl-number">N° : <span th:text="${bl?.numeroBL}">0000</span></div>
+</div>
+<br />
+<div class="info-section">
+    <p style="color: #000080" ><strong>Destinataire :</strong> <span th:text="${bl?.clientNom}">NOM CLIENT</span></p>
+
+    <div class="objet-container">
+        <strong>Objet :</strong> <span th:text="${bl?.objet}">OBJET DU BL</span>
+    </div>
+
+    <p><strong>N° BC :</strong> <span th:text="${bcNumeroFormate}">----</span></p>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th style="width: 50%;">Désignation</th>
+        <th style="width: 10%;">Unité</th>
+        <th style="width: 13%;">Quantité</th>
+        <th style="width: 17%;">PU HTVA</th>
+        <th style="width: 30%;">Montant HTVA</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${bl?.items}">
+        <td th:text="${item.designation}" style="font-size: 11pt ;text-align: left;"></td>
+        <td th:text="${item.unite}" style="text-align: center;"></td>
+        <td style="text-align: center;"
+            th:text="${#numbers.formatDecimal(item.quantite, 1, 'POINT', 2, 'COMMA')}">
+            0,00
+        </td>
+        <td th:text="${#numbers.formatDecimal(item.prixUnitaire, 1,'POINT', 2,'COMMA')}" style="text-align: center;"></td>
+        <td th:text="${#numbers.formatDecimal(item.montantHt, 1,'POINT', 2,'COMMA')}" style="text-align: center;"></td>
+    </tr>
+    <tr style="font-weight: bold; background-color: #E8B15A;">
+        <td colspan="4" style="text-align: center;">Total HTVA</td>
+        <td style="text-align: center;"
+            th:text="${#numbers.formatDecimal(bl?.totalHt, 1, 'POINT', 2, 'COMMA')}">
+            0,00</td>
+    </tr>
+    </tbody>
+</table><br /> <br />
+
+<div class="phrase-fin">
+    <p>Arrêter à la somme de :
+        <strong th:text="${phraseTotale}">TOTAL EN LETTRES ICI</strong>
+    </p>
+</div>
+
+<div class="signature-section">
+    <div class="sig-box">
+        <strong>Fournisseur: KARESS</strong>
+        <div class="sig-frame">
+            <img th:if="${bl.cachetBase64}"
+                 th:src="'data:image/png;base64,' + ${bl.cachetBase64}"
+                 class="cachet-image" /> </div>
+    </div>
+    <div class="sig-box right">
+        <strong>Client: <span th:text="${bl?.clientNom}">CLIENT</span></strong>
+        <div class="sig-frame">
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    STE KARESS S.A.R.L au capital de 100 000.00 DH.— Siège social : 2ème étage, —N°95 BD BIR Anzarane Hay Nakhla, EL AIOUN<br />
+    Tél : 06 61 91 87 70 / Fax : 05 36 67 00 11 — E-mail : karess.sarl@hotmail.com<br />
+    RC N° 395 — Patente N° 11902240 — IF 15187659 — CNSS 4115772 — ICE 000517659000034<br />
+    RIB 007587000220500000013587 (ATTIJARIWAFA BANK)
+</div>
+
+</body>
+</html>

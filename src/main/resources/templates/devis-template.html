@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        @page { margin: 7mm; }
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            margin: 10mm;
+            color: #000;
+            line-height: 1.2;
+        }
+
+        /* LOGO O DATE LFO9 GA3 */
+        .header-top {
+            width: 100%;
+            margin-bottom: 20px;
+            display: table;
+        }
+        .logo-box { display: table-cell; vertical-align: top; width: 50%; }
+        .logo-box img { width: 250px; }
+
+        .date-box {
+            display: table-cell;
+            vertical-align: top;
+            text-align: right;
+            width: 50%;
+        }
+        .date-text {
+            background-color: #D9EAF7;
+            padding: 8px 15px;
+            font-weight: bold;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        /* itar gris dyl client */
+       .client-info-box {
+    background-color: #D9EAF7;
+    padding: 8px 12px; /* sgherna l-khwa li daxel (top/bottom) */
+    text-align: center;
+    font-weight: bold;
+    width: 60%;        /* Sgherna l-3ard men 80% l 60% bach i-ji mجموع f l-wasat */
+    margin: 5px auto 15px auto; /* Naqsna chwiya l-fara'ghat li drah */
+    border-radius: 4px; /* Zid hadi ila bghiti jnnab i-jiw chwiya m9oussin kima l-date */
+}
+        .client-name { font-weight: bold; font-size: 14pt; display: block; }
+
+        /* L'OBJET F ITAR GRIS */
+        .objet-container {
+            background-color: #D9EAF7;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 11pt;
+            font-weight: bold;
+        }
+
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th, td { border: 1px solid #000; padding: 6px; word-wrap: break-word; font-weight: bold;  }
+
+        th {
+            background-color: #E8B15A;
+            text-align: center;
+            font-size: 12pt;
+        }
+
+        .section-row { background-color: #D9EAF7; font-weight: bold; font-size: 12pt}
+        .total-row { background-color: #E8B15A; font-weight: bold; }
+
+          .phrase-fin {
+            background-color: #D9EAF7;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 11pt;
+            font-weight: bold;
+        }
+        .phrase-fin strong {
+            font-size: 11pt;
+        }
+
+        .footer { position: fixed; bottom: 10px; font-size: 8pt; text-align: center; width: 100%; border-top: none; padding-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="header-top">
+    <div class="logo-box">
+        <img th:src="@{classpath:static/images/logo.png}" src="images/logo.png" />
+    </div>
+    <div class="date-box">
+        <div class="date-text">
+            El Aïoun, Le <span th:text="${#dates.format(#dates.createNow(), 'dd-MM-yyyy')}">11-05-2026</span>
+        </div>
+    </div>
+</div>
+
+<div class="client-info-box">
+    <span class="client-name" th:text="${devis.clientNom}">NOM DU CLIENT</span>
+    Offre de prix N° : <span th:text="${devis.numeroOffre}">000/2026</span>
+</div>
+
+<div class="objet-container">
+    <strong>Objet :</strong> <span th:text="${devis.objet}">Description de l'offre</span>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th style="width: 50%;">Désignation</th>
+        <th style="width: 10%;">Unité</th>
+        <th style="width: 10%;">Qu'</th>
+        <th style="width: 15%;">Prix U</th>
+        <th style="width: 15%;">Total HTVA</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="section : ${devis.sections}">
+        <tr class="section-row">
+            <td colspan="5" th:text="${section.titre}">Titre de la section</td>
+        </tr>
+        <tr th:each="item : ${section.items}">
+            <td style="font-size: 11pt;font-weight: bold;" th:text="${item.designation}">Détail...</td>
+            <td style="text-align: center;font-size: 11pt;font-weight: bold;" th:text="${item.unite}">U</td>
+            <td style="text-align: center;font-size: 11pt;font-weight: bold;" th:text="${#numbers.formatDecimal(item.quantite, 1,'POINT', 2,'COMMA')}">1.00</td>
+            <td style="text-align: center;font-size: 11pt;font-weight: bold;" th:text="${#numbers.formatDecimal(item.prixUnitaire, 1,'POINT', 2,'COMMA')}">0.00</td>
+            <td style="text-align: center;font-size: 11pt;font-weight: bold;" th:text="${#numbers.formatDecimal(item.montantHt, 1,'POINT', 2,'COMMA')}">0.00</td>
+        </tr>
+    </th:block>
+    <tr class="total-row">
+        <td colspan="4" style="text-align: center;font-size: 13pt;">TOTAL HTVA</td>
+        <td style="text-align: center;font-size: 13pt;" th:text="${#numbers.formatDecimal(devis.totalGeneralHt, 1,'POINT', 2,'COMMA')}">0.00</td>
+    </tr>
+    </tbody>
+</table> <br/>
+<div class="phrase-fin">
+    <p>Le présent devis Arrêté à la somme de :
+        <strong th:text="${phraseTotale}">TOTAL EN LETTRES ICI</strong>
+    </p>
+</div>
+<div style="width: 100%; text-align: right; padding-right: 50px;">
+    <div style="display: inline-block; text-align: center;">
+
+        <div style="border: 1px solid white; width: 250px; height: 150px; text-align: center;">
+            <img th:if="${devis.cachetBase64 != null}"
+                 th:attr="src='data:image/png;base64,' + ${devis.cachetBase64}"
+                 style="max-width: 220px; max-height: 130px; display: block; margin: 10px auto;" />
+        </div>
+    </div>
+</div>
+
+
+<div class="footer">
+    STE KARESS S.A.R.L au capital de 100 000.00 DH.— Siège social : 2ème étage, —N°95 BD BIR Anzarane Hay Nakhla, EL AIOUN<br />
+    Tél : 06 61 87 70 / Fax : 05 36 67 00 11 — E-mail : karess.sarl@hotmail.com<br />
+    RC N° 395 — Patente N° 11902240 — IF 15187659 — CNSS 4115772 — ICE 000517659000034<br />
+    RIB 007587000220500000013587 (ATTIJARIWAFA BANK)
+</div>
+
+</body>
+</html>
