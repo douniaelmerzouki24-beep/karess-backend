@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Base64;
 @RestController
 @RequestMapping("/api/devis")
-@CrossOrigin("*") // Pour permettre les appels depuis ton Frontend (React/Angular)
+@CrossOrigin(origins = "*") // Pour permettre les appels depuis ton Frontend (React/Angular)
 public class DevisController {
 
     @Autowired

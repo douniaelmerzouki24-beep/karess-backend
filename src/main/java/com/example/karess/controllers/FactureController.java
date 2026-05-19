@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/factures")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 public class FactureController {
 
     @Autowired

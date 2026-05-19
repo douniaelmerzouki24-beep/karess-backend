@@ -11,7 +11,7 @@ import java.util.Base64;
 
 @RestController
 @RequestMapping("/api/bl")
-@CrossOrigin("*") // Autorise Angular (port 60756) à communiquer avec Java
+@CrossOrigin(origins = "*")// Autorise Angular (port 60756) à communiquer avec Java
 public class BonLivraisonController {
 
     @Autowired
