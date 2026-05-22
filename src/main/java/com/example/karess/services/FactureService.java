@@ -59,7 +59,7 @@ public class FactureService {
         data.put("tvaFormate", formaterMontant(facture.getTotalTva()));
         data.put("totalTtcFormate", formaterMontant(facture.getTotalTtc()));
         data.put("bcNumeroFormate", bcFormate);
-        return pdfService.generatePdfFromHtml("facture-template", data);
+        return pdfService.generatePdfFromHtml("test_karess", data);
 
     }
     public Facture saveFacture(Facture facture) {
