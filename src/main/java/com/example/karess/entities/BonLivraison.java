@@ -20,7 +20,7 @@ public class BonLivraison {
     private String bcNumero;      // N° BC :
     private String objet;         // Objet :
     private LocalDate dateLivraison; // El Aïoun le 14/04/2026
-
+    private String destinataire;
     // --- CHAMPS DE CALCUL MANQUANTS ---
     private Double totalHt;       // Pour le champ "Total HTVA"
 
